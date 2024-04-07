@@ -12,7 +12,7 @@ api_key = os.getenv('OPENAI_API_KEY')
 class Invention(BaseModel):
   model_config = ConfigDict(strict=True)
   title: str
-  year: int
+  year: str
   summary: str
   description: str
   inventor: str
@@ -62,9 +62,13 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   }
 
   response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+  response_json = response.json()
 
   # print(response.json())
-  content = response.json()["choices"][0]["message"]["content"]
+  if "error" in response_json:
+    print(response_json["error"]["message"])
+    return []
+  content = response_json["choices"][0]["message"]["content"]
   # print(content)
 
   # Extract the JSON bit from the response.
@@ -76,7 +80,7 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
 
   parsed = json.loads(content)
   for invention in parsed:
-    invention["year"] = int(invention["year"])
+    invention["year"] = str(invention["year"])
   # print(parsed)
 
   return [Invention(**invention) for invention in parsed]

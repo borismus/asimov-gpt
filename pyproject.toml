@@ -1,0 +1,9 @@
+[project]
+name = "asimov-gpt"
+version = "0.0.1"
+
+dependencies = [
+  "pypdf",
+  "pydantic",
+  "pillow"
+]
