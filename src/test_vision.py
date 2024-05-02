@@ -14,11 +14,18 @@ class Invention(BaseModel):
   title: str
   year: str
   summary: str
-  description: str
   inventor: str
   location: str
   field: str
   related: str
+  description: str = None
+  id: str = None
+
+  def year_number(self):
+    if (self.year.endswith('BCE')):
+      return -int(self.year[:-3])
+
+    return int(self.year)
 
 def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   headers = {
@@ -35,16 +42,16 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
         "content": [
           {
             "type": "text",
-            "text": """Summarize the inventions on the following page. Provide the following information for each invention:
+            "text": """Summarize the inventions or discoveries on the following page. Provide the following information for each invention or discovery:
 
   - Title
   - Year
-  - Summary (Two sentence summary without mentioning the name of the inventor, focusing on what the invention does, how it works, and its impact)
+  - Summary (Two sentence summary without mentioning people or dates, focusing on what the invention or discovery is and does, and its impact)
   - Description (Full description)
   - Name of the inventor
-  - Country where the invention was made
+  - Country where the invention or discovery was made
   - Field (one of Math, Science, Culture, War, General, Design, Geography, Space)
-  - A single related previous invention (if something influenced this invention, list it here)
+  - A single related previous inventions or discoveries (if something influenced it, list it here)
 
   Output should be described as an array of JSON objects with the following keys: title, summary, description, year, inventor, location, field, related.
   """
@@ -78,7 +85,7 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
     print(content)
     print("Something went wrong", e)
 
-  parsed = json.loads(content)
+  parsed = json.loads(content.strip())
   for invention in parsed:
     invention["year"] = str(invention["year"])
   # print(parsed)
