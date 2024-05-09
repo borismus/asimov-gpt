@@ -88,7 +88,9 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   parsed = json.loads(content.strip())
   for invention in parsed:
     invention["year"] = str(invention["year"])
-  # print(parsed)
+    # Format the title so that only the first letter of the first word is capitalized.
+    title = invention["title"]
+    invention["title"] = title[0].upper() + title[1:].lower()
 
   return [Invention(**invention) for invention in parsed]
 
