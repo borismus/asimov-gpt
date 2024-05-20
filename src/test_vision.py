@@ -34,7 +34,7 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   }
 
   payload = {
-    "model": "gpt-4-vision-preview",
+    "model": "gpt-4o",
   #   "response_format": {"type": "json_object"},
     "messages": [
       {
