@@ -77,7 +77,7 @@ if __name__ == '__main__':
   parser.add_argument("--force", action="store_true", help="Force re-generation of images.")
   args = parser.parse_args()
 
-  inventions = load_inventions("asimov-1850.tsv")
+  inventions = load_inventions("asimov.tsv")
   # Scrap the header.
   inventions = inventions[1:]
   print(f"Loaded {len(inventions)} inventions.")
