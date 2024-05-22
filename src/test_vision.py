@@ -48,12 +48,12 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   - Year
   - Summary (Two sentence summary without mentioning people or dates, focusing on what the invention or discovery is and does, and its impact)
   - Description (Full description)
-  - Name of the inventor
-  - Country where the invention or discovery was made
-  - Field (one of Math, Science, Culture, War, General, Design, Geography, Space)
+  - Full name of the inventor
+  - Country where the invention or discovery was made. In the case of Great Britain or the United Kingdom, use "England"
+  - Field (one of Math, Science, Culture, War, General, Design, Geography, Space). Sub-fields can be indicated with a colon (e.g. "Science:Physics or Science:Biology")
   - A single related previous inventions or discoveries (if something influenced it, list it here)
 
-  Output should be described as an array of JSON objects with the following keys: title, summary, description, year, inventor, location, field, related.
+  Output should be described as an array of JSON objects with the following keys: title, summary, description, year, inventor, location, field, related. Please ignore sections entitled "In Addition".
   """
           },
           {
@@ -94,6 +94,11 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
 
   return [Invention(**invention) for invention in parsed]
 
+
+def summarize_inventions_from_two_page_context(base64_image1: str, base64_image2: str) -> list[Invention]:
+  # Use the first page to get a list of headings.
+  # Use both pages to get the content for each heading.
+  pass
 
 
 # Function to encode the image
