@@ -4,28 +4,11 @@ import base64
 import json
 import requests
 import os
-from pydantic import BaseModel, ConfigDict
+
+from utils import Invention
 
 # OpenAI API Key
 api_key = os.getenv('OPENAI_API_KEY')
-
-class Invention(BaseModel):
-  model_config = ConfigDict(strict=True)
-  title: str
-  year: str
-  summary: str
-  inventor: str
-  location: str
-  field: str
-  related: str
-  description: str = None
-  id: str = None
-
-  def year_number(self):
-    if (self.year.endswith('BCE')):
-      return -int(self.year[:-3])
-
-    return int(self.year)
 
 def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
   headers = {

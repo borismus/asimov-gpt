@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import argparse
-import csv
 import os
 import urllib.request
 
-from test_vision import Invention
+from utils import Invention, load_inventions
 from openai import OpenAI
 
 api_key = os.getenv('OPENAI_API_KEY')
@@ -30,30 +29,6 @@ Generate vibrant art nouveau for the invention/discovery described above. The im
   )
 
   return response.data[0].url
-
-def load_inventions(tsv_path) -> list[Invention]:
-  with open(tsv_path, "r") as file:
-    reader = csv.reader(file, delimiter="\t", quotechar='"')
-    inventions = [Invention(**invention_from_tsv(row)) for row in reader]
-    return inventions
-
-def invention_from_tsv(fields: list[str]) -> dict:
-  if len(fields) <= 8:
-    # print(fields)
-    print(f"Warning: Invalid TSV format. Only {len(fields)} fields found.")
-    if len(fields) == 7:
-      # Unknown field.
-      fields.append("Unknown")
-  return {
-    "id": fields[0],
-    "year": fields[1],
-    "title": fields[2],
-    "summary": fields[3],
-    "inventor": fields[4],
-    "location": fields[5],
-    "related": fields[6],
-    "field": fields[7],
-  }
 
 def get_unique_path(invention: Invention, default=False) -> str:
   index = 0
