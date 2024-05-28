@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 import csv
 
+
 class Invention(BaseModel):
   model_config = ConfigDict(strict=True)
   title: str
@@ -14,16 +15,20 @@ class Invention(BaseModel):
   id: str = None
 
   def year_number(self):
-    if (self.year.endswith('BCE')):
+    if self.year.endswith("BCE"):
       return -int(self.year[:-3])
 
     return int(self.year)
+
 
 def load_inventions(tsv_path) -> list[Invention]:
   with open(tsv_path, "r") as file:
     reader = csv.reader(file, delimiter="\t", quotechar='"')
     inventions = [Invention(**invention_from_tsv(row)) for row in reader]
+    # Skip the header.
+    inventions = inventions[1:]
     return inventions
+
 
 def invention_from_tsv(fields: list[str]) -> dict:
   if len(fields) <= 8:

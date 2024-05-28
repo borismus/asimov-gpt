@@ -53,8 +53,6 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   inventions = load_inventions("asimov.tsv")
-  # Scrap the header.
-  inventions = inventions[1:]
   print(f"Loaded {len(inventions)} inventions.")
 
   if args.one:
