@@ -25,18 +25,21 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
         "content": [
           {
             "type": "text",
-            "text": """Summarize the inventions or discoveries on the following page. Provide the following information for each invention or discovery:
+            "text": """Summarize the inventions or discoveries on the following page. Please ignore sections entitled "In Addition".
 
-  - Title
-  - Year
-  - Summary (Two sentence summary without mentioning people or dates, focusing on what the invention or discovery is and does, and its impact)
-  - Description (Full description)
-  - Full name of the inventor
-  - Country where the invention or discovery was made. In the case of Great Britain or the United Kingdom, use "England"
-  - Field (one of Math, Science, Culture, War, General, Design, Geography, Space). Sub-fields can be indicated with a colon (e.g. "Science:Physics or Science:Biology")
-  - A single related previous inventions or discoveries (if something influenced it, list it here)
+Provide the following information for each invention or discovery. Output should be described as an array of JSON objects with the following keys:
 
-  Output should be described as an array of JSON objects with the following keys: title, summary, description, year, inventor, location, field, related. Please ignore sections entitled "In Addition".
+  - title: one to three words describing the invention or discovery.
+  - year: the year the invention or discovery was made.
+  - description: full description of the invention or discovery as close to the text as possible.
+  - summary: two sentence summary without mentioning people or dates, focusing on what the invention or discovery is and does, and its impact.
+  - description: full description of the invention or discovery.
+  - inventor: full name of the inventor or discoverer.
+  - location: in which country was the invention or discovery made? In the case of Great Britain or the United Kingdom, use "England".
+  - field: (one of Math, Science, Culture, War, General, Design, Geography, Space). Sub-fields can be indicated with a colon (e.g. "Science: Physics or Science: Biology")
+  - related: one or more related previous invention or discovery, separated by commas. If there are no related inventions or discoveries, use "".
+
+Remember to escape quotes in JSON strings.
   """
           },
           {
@@ -48,7 +51,7 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
         ]
       }
     ],
-    "max_tokens": 1000
+    "max_tokens": 2000
   }
 
   response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
@@ -63,12 +66,20 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
 
   # Extract the JSON bit from the response.
   try:
-    content = content.split("```json")[1].split("```")[0]
+    if content.find("```json") == -1:
+      json_content = content
+    else:
+      json_content = content.split("```json")[1].split("```")[0]
   except Exception as e:
+    print("ERROR extracing JSON from response:", e)
     print(content)
-    print("Something went wrong", e)
 
-  parsed = json.loads(content.strip())
+  try:
+    parsed = json.loads(json_content)
+  except Exception as e:
+    print("ERROR parsing extracted JSON:", e)
+    print(json_content)
+
   for invention in parsed:
     invention["year"] = str(invention["year"])
     # Format the title so that only the first letter of the first word is capitalized.
