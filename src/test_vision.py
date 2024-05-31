@@ -27,7 +27,7 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
             "type": "text",
             "text": """Summarize the inventions or discoveries on the following page. Please ignore sections entitled "In Addition".
 
-Provide the following information for each invention or discovery. Output should be described as an array of JSON objects with the following keys:
+Provide the following information for each invention or discovery. Output should be described as an array of JSON objects with the following keys (the values should all be strings):
 
   - title: one to three words describing the invention or discovery.
   - year: the year the invention or discovery was made.
@@ -39,7 +39,7 @@ Provide the following information for each invention or discovery. Output should
   - field: (one of Math, Science, Culture, War, General, Design, Geography, Space). Sub-fields can be indicated with a colon (e.g. "Science: Physics or Science: Biology")
   - related: one or more related previous invention or discovery, separated by commas. If there are no related inventions or discoveries, use "".
 
-Remember to escape quotes in JSON strings.
+Remember to escape quotes in JSON strings, and ensure the JSON is valid.
   """
           },
           {
