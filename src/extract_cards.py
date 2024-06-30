@@ -13,7 +13,7 @@ print(f"Loaded PDF with {len(reader.pages)} pages.")
 
 
 def invention_to_tsv(invention: Invention):
-  slug = invention.title.lower().replace(" ", "-")
+  slug = invention.title.lower().replace(" ", "-").replace("'", "")
   separated_fields = [slug, invention.year, invention.title, invention.summary, invention.inventor, invention.location, invention.related, invention.field, invention.description]
   return "\t".join([str(field) for field in separated_fields])
 
