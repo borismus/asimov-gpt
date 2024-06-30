@@ -51,6 +51,7 @@ Your task is to write a tweet that will generate interest in my visual chronolog
   if "error" in response_json:
     print(response_json["error"]["message"])
   content = response_json["choices"][0]["message"]["content"]
+  content += " #AiArt"
   print(content)
   print(f"https://invention.cards/{invention.id}")
   print('---')
