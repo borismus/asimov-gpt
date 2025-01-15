@@ -29,15 +29,14 @@ def summarize_inventions_from_image(base64_image: str) -> list[Invention]:
 
 Provide the following information for each invention or discovery. Output should be described as an array of JSON objects with the following keys (the values should all be strings):
 
-  - title: one to three words describing the invention or discovery.
-  - year: the year the invention or discovery was made.
-  - description: full description of the invention or discovery as close to the text as possible.
-  - summary: two sentence summary without mentioning people or dates, focusing on what the invention or discovery is and does, and its impact.
-  - description: full description of the invention or discovery.
-  - inventor: full name of the inventor or discoverer.
-  - location: in which country was the invention or discovery made? In the case of Great Britain or the United Kingdom, use "England".
-  - field: (one of Math, Science, Culture, War, General, Design, Geography, Space). Sub-fields can be indicated with a colon (e.g. "Science: Physics or Science: Biology")
-  - related: one or more related previous invention or discovery, separated by commas. If there are no related inventions or discoveries, use "".
+  - title: One to three words describing the invention or discovery.
+  - year: The year the invention or discovery was made.
+  - description: The full text of the invention or discovery, as written in the provided image.
+  - summary: Three sentences; the first describes necessary context to understand the invention. The second describes what the invention is, and the last sentence describes its implications. DO NOT MENTION PEOPLE OR DATES. Do not exceed 150 characters for this field.
+  - inventor: The full name of the inventor or discoverer.
+  - location: In which country was the invention or discovery made? In the case of Great Britain or the United Kingdom, use "England".
+  - field: Should be one of Math, Science, Culture, War, General, Design, Geography, Space. Sub-fields can be indicated with a colon (e.g. "Science: Physics or Science: Biology"). Instead of "Science: Astronomy", use "Space"
+  - related: One or more related previous invention or discovery, separated by commas. If there are no related inventions or discoveries, use "".
 
 Remember to escape quotes in JSON strings, and ensure the JSON is valid.
   """
@@ -51,7 +50,7 @@ Remember to escape quotes in JSON strings, and ensure the JSON is valid.
         ]
       }
     ],
-    "max_tokens": 2000
+    "max_tokens": 4000
   }
 
   response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
