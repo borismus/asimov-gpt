@@ -2,7 +2,7 @@
 name = "asimov-gpt"
 version = "0.0.1"
 
-dependencies = ["pypdf", "pydantic", "pillow", "requests"]
+dependencies = ["openai", "pypdf", "pydantic", "pillow", "requests"]
 
 [tool.ruff]
 indent-width = 2
